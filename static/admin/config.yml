@@ -1,0 +1,102 @@
+backend:
+  name: github
+  repo: YKdenis/netlify-artist-agency
+  branch: main
+media_folder: static/img
+public_folder: /img
+collections:
+  - name: "artists"
+    label: "Artists"
+    folder: "src/artists"
+    label_singular: "Artist"
+    slug: "{{firstName}}-{{lastName}}"
+    identifier_field: "lastName"
+    create: true
+    fields:
+      - {
+          label: "Template Key",
+          name: "templateKey",
+          widget: "hidden",
+          default: "artist",
+        }
+      - { label: "First Name", name: "firstName" }
+      - { label: "Last Name", name: "lastName" }
+      - { label: "Artist Name", name: "artistName", required: false }
+      - { name: "email", label: "Email" }
+      - { name: "phone", label: "Phone", required: false }
+      - { name: "height", label: "Height", required: false }
+      - { name: "locale", label: "Locale", required: false }
+      - {
+          name: "shoeSize",
+          label: "Shoe Size",
+          min: 30,
+          max: 55,
+          step: 0.5,
+          value_type: "float",
+          required: false,
+        }
+      - { name: "description", label: "Description", widget: "text" }
+      - {
+          name: "profile",
+          label: "Profile",
+          widget: "object",
+          summary: "Profile",
+          fields:
+            [
+              { name: "image", label: "Image", widget: "image" },
+              { name: "alt", label: "alt text" },
+            ],
+        }
+      - {
+          name: "gallery",
+          label: "Gallery",
+          widget: "list",
+          summary: "Gallery",
+          min: 3,
+          max: 3,
+          fields:
+            [
+              { name: "picture", label: "Picture", widget: "image" },
+              { name: "alt", label: "Alt text" },
+            ],
+        }
+  - name: "pages"
+    label: "Pages"
+    files:
+      - file: "src/pages.index.md"
+        label: "Home Page"
+        name: "index"
+        fields:
+          - {
+              label: "Header",
+              name: "header",
+              widget: "object",
+              summary: "Header",
+              fields:
+                [
+                  { name: "title", label: "Title" },
+                  { name: "description", label: "Description", widget: "text" },
+                  {
+                    name: "picture",
+                    label: "Picture",
+                    widget: "object",
+                    summary: "Picture",
+                    fields:
+                      [
+                        { name: "image", label: "Image", widget: "image" },
+                        { name: "alt", label: "alt" },
+                      ],
+                  },
+                ],
+            }
+          - { name: "description", label: "Description", widget: "text" }
+          - {
+              name: "featuredArtists",
+              label: "Featured Artists",
+              widget: "relation",
+              collection: "artists",
+              search_fields: ["firstName", "lastName"],
+              value_field: "{{slug}}",
+              display_fields: ["firstName", "lastName"],
+              multiple: true,
+            }
